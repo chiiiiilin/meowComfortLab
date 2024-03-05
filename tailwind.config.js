@@ -2,10 +2,12 @@
 export default {
 	content: [],
 	theme: {
-		colors: {
-			primary: {
-				DEFAULT: '#E6EBE9',
-				dark: '#747D78',
+		extend: {
+			colors: {
+				primary: {
+					DEFAULT: '#E6EBE9',
+					dark: '#747D78',
+				},
 			},
 		},
 	},

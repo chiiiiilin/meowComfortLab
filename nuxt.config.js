@@ -4,4 +4,10 @@ import * as path from 'path';
 export default defineNuxtConfig({
 	devtools: { enabled: true },
 	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
+	nitro: {
+		preset: 'firebase',
+		firebase: {
+		  gen: 2
+		}
+	  }
 });

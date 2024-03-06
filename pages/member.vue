@@ -5,9 +5,6 @@
 
 <script setup>
 const { logoutUser } = useFirebaseAuth();
-definePageMeta({
-	middleware: 'auth',
-});
 
 const handleLogout = async () => {
 	const isSuccess = await logoutUser();
@@ -17,6 +14,13 @@ const handleLogout = async () => {
 		console.log('登出失敗');
 	}
 };
+
+onMounted(() => {
+	const { user } = useFirebaseAuth();
+	if (!user.value || !user.value.emailVerified) {
+		navigateTo('/auth');
+	}
+});
 </script>
 
 <style lang="scss" scoped></style>

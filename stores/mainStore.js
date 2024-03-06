@@ -1,5 +1,12 @@
 import { defineStore } from 'pinia';
 export const useMainStore = defineStore('mainStore', () => {
+	const isNavOpen = ref(false);
+	const toggleNav = () => {
+		isNavOpen.value = !isNavOpen.value;
+	};
+	const closeNav = () => {
+		isNavOpen.value = false;
+	};
 	const navItems = ref([
 		{
 			name: '所有商品',
@@ -46,5 +53,5 @@ export const useMainStore = defineStore('mainStore', () => {
 		{ icon: true, name: '購物車', source: 'shopping-cart' },
 	]);
 
-	return { navItems };
+	return { isNavOpen, toggleNav, closeNav, navItems };
 });

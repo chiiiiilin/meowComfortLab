@@ -1,9 +1,9 @@
 <template>
-	<header class="bg-primary shadow-lg fixed w-full z-50">
+	<header class="bg-primary shadow-lg fixed w-full z-[999]">
 		<div
 			class="max-w-screen-xl px-3 lg:px-0 flex justify-between items-center mx-auto"
 		>
-			<h1 class="h-[55px] lg:h-[70px]">
+			<h1 class="h-[45px] lg:h-[60px]">
 				<NuxtLink to="/"
 					><img
 						src="/image/logo-large.svg"
@@ -135,16 +135,16 @@
 				src="https://chiiiiilin.github.io/lifecat/pictures/hb.svg"
 				alt=""
 				class="w-8 h-8 cursor-pointer lg:hidden"
-				@click="toggleNav"
+				@click="mainStore.toggleNav"
 			/>
 		</div>
 	</header>
 	<!-- 手機 -->
 	<nav
-		class="absolute w-full top-[55px] left-0 bg-primary py-5 transition duration-500 shadow-md"
+		class="absolute w-full top-[45px] left-0 bg-primary py-5 transition duration-500 shadow-md z-[998]"
 		:class="{
-			'translate-y-0': isNavOpen,
-			'translate-y-[-120%]': !isNavOpen,
+			'translate-y-0': mainStore.isNavOpen,
+			'translate-y-[-120%]': !mainStore.isNavOpen,
 		}"
 	>
 		<ul class="list-none items-center flex flex-col">
@@ -284,15 +284,10 @@
 			</div>
 		</ul>
 	</nav>
-	<div class="h-[55px] lg:h-[70px]"></div>
+	<div class="h-[45px] lg:h-[70px]"></div>
 </template>
 <script setup>
 // import { ref } from 'vue';
 const mainStore = useMainStore();
-
-const isNavOpen = ref(false);
-const toggleNav = () => {
-	isNavOpen.value = !isNavOpen.value;
-};
 </script>
 <style scoped></style>

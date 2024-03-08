@@ -284,7 +284,7 @@
 			</div>
 		</ul>
 	</nav>
-	<div class="h-[45px] lg:h-[70px]"></div>
+	<div class="h-[45px] lg:h-[60px]"></div>
 </template>
 <script setup>
 // import { ref } from 'vue';

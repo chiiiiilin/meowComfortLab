@@ -3,6 +3,14 @@ export default {
 	content: [],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: [
+					'genseki',
+					'jf-openhuninn',
+					'ui-sans-serif',
+					'system-ui',
+				],
+			},
 			colors: {
 				primary: {
 					DEFAULT: '#E6EBE9',

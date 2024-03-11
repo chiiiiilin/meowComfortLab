@@ -119,7 +119,7 @@
 						<li>
 							<NuxtLink
 								:to="`/${navItem.source}`"
-								class="text-lg font-bold"
+								class="text-lg"
 							>
 								{{ navItem.name }}
 							</NuxtLink>
@@ -131,7 +131,7 @@
 									v-for="navChild in navItem.children"
 									:key="navChild.name"
 									:to="`/${navItem.source}/${navChild.source}`"
-									class="block hover:text-primary-dark transition duration-300"
+									class="block text-primary-dark hover:text-gray-700 transition duration-300"
 									>{{ navChild.name }}
 								</NuxtLink>
 							</li>

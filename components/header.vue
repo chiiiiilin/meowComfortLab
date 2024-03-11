@@ -1,7 +1,7 @@
 <template>
 	<header class="bg-primary shadow-lg fixed w-full z-[999]">
 		<div
-			class="max-w-screen-xl px-3 lg:px-0 flex justify-between items-center mx-auto"
+			class="max-w-screen-xl px-3 flex justify-between items-center mx-auto"
 		>
 			<h1 class="h-[45px] lg:h-[60px]">
 				<NuxtLink to="/"

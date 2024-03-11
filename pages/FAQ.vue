@@ -1,6 +1,10 @@
 <template>
 	<main class="max-w-screen-lg m-auto my-[100px] px-3">
-		<section v-for="doc in documents" :key="doc.id" class="px-4 py-5">
+		<section
+			v-for="doc in mainStore.faqList"
+			:key="doc.id"
+			class="px-4 py-5"
+		>
 			<h2>{{ doc.title }}</h2>
 			<div class="lg:flex justify-between">
 				<div
@@ -32,22 +36,11 @@
 </template>
 
 <script setup>
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-
-const documents = ref([]);
+const mainStore = useMainStore();
 
 onMounted(async () => {
-	const db = getFirestore();
-	const docRef = doc(db, 'siteInfo', 'FAQ');
-	const docSnap = await getDoc(docRef);
-	if (docSnap.exists()) {
-		let data = docSnap.data();
-		documents.value = Object.entries(data)
-			.map(([id, content]) => ({
-				id,
-				...content,
-			}))
-			.sort((a, b) => a.order - b.order);
+	if (mainStore.length === 0) {
+		mainStore.getFaqList();
 	}
 });
 </script>

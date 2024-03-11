@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 export const useMainStore = defineStore('mainStore', () => {
+	//rwd的目錄切換
 	const isNavOpen = ref(false);
 	const toggleNav = () => {
 		isNavOpen.value = !isNavOpen.value;
@@ -7,6 +9,7 @@ export const useMainStore = defineStore('mainStore', () => {
 	const closeNav = () => {
 		isNavOpen.value = false;
 	};
+	//網站目錄
 	const navItems = ref([
 		{
 			name: '所有商品',
@@ -48,5 +51,29 @@ export const useMainStore = defineStore('mainStore', () => {
 		{ icon: true, name: '購物車', source: 'shopping-cart' },
 	]);
 
-	return { isNavOpen, toggleNav, closeNav, navItems };
+	//FAQ內容
+	const faqList = ref([]);
+	const getFaqList = async () => {
+		const db = getFirestore();
+		const docRef = doc(db, 'siteInfo', 'FAQ');
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			let data = docSnap.data();
+			faqList.value = Object.entries(data)
+				.map(([id, content]) => ({
+					id,
+					...content,
+				}))
+				.sort((a, b) => a.order - b.order);
+		}
+	};
+
+	return {
+		isNavOpen,
+		toggleNav,
+		closeNav,
+		navItems,
+		faqList,
+		getFaqList,
+	};
 });

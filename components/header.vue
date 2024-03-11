@@ -151,9 +151,12 @@
 			<template v-for="navItem in mainStore.navItems" :key="navItem.name">
 				<li
 					v-if="!navItem.icon"
-					class="w-full text-center cursor-pointer py-3 hover:bg-primary-dark hover:text-white"
+					class="w-full text-center cursor-pointer hover:bg-primary-dark hover:text-white"
 				>
-					<NuxtLink :to="`/${navItem['source']}`" class="">
+					<NuxtLink
+						:to="`/${navItem['source']}`"
+						class="w-full block py-3"
+					>
 						{{ navItem['name'] }}
 					</NuxtLink>
 				</li>
@@ -287,7 +290,6 @@
 	<div class="h-[45px] lg:h-[60px]"></div>
 </template>
 <script setup>
-// import { ref } from 'vue';
 const mainStore = useMainStore();
 </script>
 <style scoped></style>

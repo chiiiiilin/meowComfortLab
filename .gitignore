@@ -6,6 +6,7 @@
 .cache
 .firebase
 dist
+data-initialize
 
 # Node dependencies
 node_modules

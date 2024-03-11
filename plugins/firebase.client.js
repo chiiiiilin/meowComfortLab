@@ -12,12 +12,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 		storageBucket: config.public.firebaseStorageBucket,
 		messagingSenderId: config.public.firebaseMessagingSenderId,
 		appId: config.public.firebaseAppId,
-		measurementId: config.public.firebaseMeasurementId,
 	};
 
 	const app = initializeApp(firebaseConfig);
 
-	const analytics = getAnalytics(app);
 	const auth = getAuth(app);
 	const firestore = getFirestore(app);
 

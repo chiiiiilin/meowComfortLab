@@ -42,12 +42,7 @@ export const useMainStore = defineStore('mainStore', () => {
 		},
 		{
 			name: '常見問題',
-			source: 'Q&As',
-			children: [
-				{ name: '貨運及付款資訊', source: 'shipping-payment' },
-				{ name: '退換貨政策', source: 'returns' },
-				{ name: '訂製申請表單', source: 'custom-order' },
-			],
+			source: 'FAQ',
 		},
 		{ icon: true, name: '會員專區', source: 'member' },
 		{ icon: true, name: '購物車', source: 'shopping-cart' },

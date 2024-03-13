@@ -39,7 +39,7 @@
 const mainStore = useMainStore();
 
 onMounted(async () => {
-	if (mainStore.length === 0) {
+	if (mainStore.faqList.length == 0) {
 		mainStore.getFaqList();
 	}
 });

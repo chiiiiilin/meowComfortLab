@@ -39,7 +39,7 @@ export default {
 					neutral: '#f3f4f6',
 					'base-100': '#ffffff',
 					info: '#bae6fd',
-					success: '#a7f3d0',
+					success: '#e3fff2',
 					warning: '#fef08a',
 					error: '#fecdd3',
 				},

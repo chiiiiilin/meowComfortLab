@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const { $toast } = useNuxtApp();
 const { registerUser, loginUser, loginWithGoogle, passwordReset } =
 	useFirebaseAuth();
@@ -46,7 +46,7 @@ const handleRegistration = async () => {
 			});
 			cardActive.value = 'isLogin';
 		}
-	} catch (error) {
+	} catch (error: any) {
 		let errorMessage = '';
 		if (
 			error.response &&
@@ -100,7 +100,7 @@ const handleLogin = async () => {
 			});
 			navigateTo('/member');
 		}
-	} catch (error) {
+	} catch (error: any) {
 		let errorMessage = '';
 
 		switch (error.code) {

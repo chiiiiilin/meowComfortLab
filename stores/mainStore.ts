@@ -10,7 +10,13 @@ export const useMainStore = defineStore('mainStore', () => {
 		isNavOpen.value = false;
 	};
 	//網站目錄
-	const navItems = ref([
+	interface NavItem {
+		name: string;
+		source: string;
+		children?: NavItem[];
+		icon?: boolean;
+	}
+	const navItems = ref<NavItem[]>([
 		{
 			name: '所有商品',
 			source: 'products',
@@ -47,12 +53,28 @@ export const useMainStore = defineStore('mainStore', () => {
 			name: '常見問題',
 			source: 'FAQ',
 		},
-		{ icon: true, name: '會員專區', source: 'member' },
+		{
+			icon: true,
+			name: '會員專區',
+			source: 'member',
+			children: [
+				{ name: '所有訂單', source: 'orders' },
+				{ name: '收藏商品', source: 'likes' },
+			],
+		},
 		{ icon: true, name: '購物車', source: 'shopping-cart' },
 	]);
 
 	//FAQ內容
-	const faqList = ref([]);
+	interface FaqItem {
+		id: string;
+		order: number;
+		title: string;
+		contents: {
+			[key: string]: any;
+		};
+	}
+	const faqList = ref<FaqItem[]>([]);
 	const getFaqList = async () => {
 		const db = getFirestore();
 		const docRef = doc(db, 'siteInfo', 'FAQ');

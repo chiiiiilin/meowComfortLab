@@ -104,8 +104,11 @@ const handleLogin = async () => {
 		let errorMessage = '';
 
 		switch (error.code) {
-			case 'INVALID_LOGIN_CREDENTIALS':
+			case 'auth/invalid-credential':
 				errorMessage = '請重新檢查電子郵件及密碼';
+				break;
+			case 'auth/wrong-password':
+				errorMessage = '密碼錯誤';
 				break;
 			default:
 				errorMessage = '發生未知錯誤，請稍後再試';
@@ -336,7 +339,7 @@ const handlePasswordReset = async () => {
 
 <style scoped>
 .background {
-	background-image: url('/image/background.jpg');
+	background-image: url('https://images.unsplash.com/photo-1571570703598-39eb580a0329?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;

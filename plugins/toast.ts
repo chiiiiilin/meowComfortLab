@@ -1,5 +1,5 @@
 export default defineNuxtPlugin((nuxtApp) => {
-	const ToastManager = {
+	const Toast = {
 		showToast({
 			message,
 			type,
@@ -26,5 +26,5 @@ export default defineNuxtPlugin((nuxtApp) => {
 		},
 	};
 
-	nuxtApp.provide('toast', ToastManager);
+	nuxtApp.provide('toast', Toast);
 });

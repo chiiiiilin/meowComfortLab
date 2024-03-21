@@ -26,7 +26,10 @@
 							class="hover:text-primary-dark transition"
 						>
 							<template v-if="navItem.icon">
-								<div v-if="navItem.name === '會員專區'">
+								<div
+									v-if="navItem.name === '會員專區'"
+									class="hidden lg:block"
+								>
 									<svg
 										width="25"
 										height="25"
@@ -143,31 +146,125 @@
 	</header>
 	<!-- 手機 -->
 	<nav
-		class="fixed w-full top-[45px] left-0 bg-primary py-5 transition duration-500 shadow-md z-[998]"
+		class="fixed w-full top-[45px] left-0 bg-primary p-5 transition duration-500 shadow-md z-[998]"
 		:class="{
 			'translate-y-0': mainStore.isNavOpen,
 			'translate-y-[-120%]': !mainStore.isNavOpen,
 		}"
 	>
-		<ul class="list-none items-center flex flex-col">
+		<ul class="list-none flex flex-col">
 			<template v-for="navItem in mainStore.navItems" :key="navItem.name">
 				<li
 					v-if="!navItem.icon"
-					class="w-full text-center cursor-pointer hover:bg-primary-dark hover:text-white"
+					class="w-full py-1 hover:text-primary-dark cursor-pointer"
 				>
 					<NuxtLink
 						:to="`/${navItem['source']}`"
-						class="w-full block py-3"
+						class="w-full block"
 					>
 						{{ navItem['name'] }}
 					</NuxtLink>
+				</li>
+			</template>
+			<div class="w-full h-[0.5px] my-4 bg-gray-400"></div>
+			<template v-if="authInitialized && user">
+				<li>Hello, {{ user.displayName }}</li>
+				<li class="text-xs text-gray-600">{{ user.email }}</li>
+				<template v-for="item in mainStore.navItems" :key="item.source">
+					<div v-if="item.source === 'member'" class="mt-3">
+						<li
+							v-for="subItem in item.children"
+							:key="subItem.source"
+						>
+							<NuxtLink
+								:to="`/${subItem.source}`"
+								class="flex items-center py-1 hover:text-primary-dark cursor-pointer"
+							>
+								<div
+									v-if="subItem.svg"
+									v-html="subItem.svg"
+								></div>
+								{{ subItem.name }}
+							</NuxtLink>
+						</li>
+						<li
+							class="cursor-pointer text-primary-dark flex items-center py-1"
+							@click="handleLogout"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="w-4 h-4 mr-2"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+								/>
+							</svg>
+
+							登出
+						</li>
+					</div>
+				</template>
+			</template>
+			<template v-else>
+				<li
+					@click="handleLogin"
+					class="cursor-pointer text-primary-dark flex items-center py-1"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-4 h-4 mr-2"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
+						/>
+					</svg>
+					登入
 				</li>
 			</template>
 		</ul>
 	</nav>
 	<div class="h-[45px] lg:h-[60px]"></div>
 </template>
-<script setup>
+<script setup lang="ts">
 const mainStore = useMainStore();
+const { $toast } = useNuxtApp();
+const { user, authInitialized, initAuthStateListener, logoutUser } =
+	useFirebaseAuth();
+
+onMounted(async () => {
+	await initAuthStateListener();
+});
+const handleLogin = () => {
+	mainStore.closeNav();
+	navigateTo('/auth');
+};
+const handleLogout = async () => {
+	const isSuccess = await logoutUser();
+	if (isSuccess) {
+		mainStore.closeNav();
+		$toast.showToast({
+			message: '已登出',
+			type: 'success',
+		});
+		navigateTo('/auth');
+	} else {
+		$toast.showToast({
+			message: '登出失敗',
+			type: 'error',
+		});
+	}
+};
 </script>
 <style scoped></style>

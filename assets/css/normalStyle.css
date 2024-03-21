@@ -1,0 +1,6 @@
+h2 {
+	@apply text-3xl px-3 lg:px-5 border-l-4 border-l-accent translate-x-[-0.75rem] lg:translate-x-[-1.6rem];
+}
+h3 {
+	@apply text-accent font-semibold tracking-wide py-3 text-base;
+}

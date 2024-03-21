@@ -1,23 +1,79 @@
 <template>
-	<div v-if="user && user.value && user.value.emailVerified">member</div>
-	<div v-else>請先驗證信箱</div>
-	<button class="btn" @click="handleLogout">logout</button>
-	<button @click="sendVerificationEmail">重發驗證信</button>
+	<div class="p-3 max-w-screen-xl m-auto py-20 lg:flex">
+		<menu class="hidden lg:block p-3 w-1/5">
+			<ul class="w-fit">
+				<template v-for="item in mainStore.navItems" :key="item.source">
+					<template v-if="item.source === 'member'">
+						<li
+							v-for="subItem in item.children"
+							:key="subItem.source"
+						>
+							<NuxtLink
+								:to="`/${subItem.source}`"
+								class="flex items-center py-1 px-3 hover:text-primary-dark cursor-pointer"
+							>
+								<div
+									v-if="subItem.svg"
+									v-html="subItem.svg"
+								></div>
+								{{ subItem.name }}
+							</NuxtLink>
+						</li>
+						<li
+							class="cursor-pointer text-primary-dark flex items-center py-1 px-3"
+							@click="handleLogout"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="w-4 h-4 mr-2"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+								/>
+							</svg>
+
+							登出
+						</li>
+					</template>
+				</template>
+			</ul>
+		</menu>
+		<div class="w-full lg:w-4/5">
+			<NuxtPage />
+		</div>
+	</div>
 </template>
 
-<script setup>
-const { user, logoutUser, sendVerificationEmail } = useFirebaseAuth();
+<script setup lang="ts">
+const mainStore = useMainStore();
+const { $toast } = useNuxtApp();
+const { user, authInitialized, initAuthStateListener, logoutUser } =
+	useFirebaseAuth();
+
 const handleLogout = async () => {
 	const isSuccess = await logoutUser();
 	if (isSuccess) {
 		navigateTo('/');
-		console.log('登出成功');
+		$toast.showToast({
+			message: '已登出',
+			type: 'success',
+		});
 	} else {
-		console.log('登出失敗');
+		$toast.showToast({
+			message: '登出失敗',
+			type: 'error',
+		});
 	}
 };
 
-onMounted(() => {
+onMounted(async () => {
+	await initAuthStateListener();
 	if (!user.value) {
 		navigateTo('/auth');
 	}

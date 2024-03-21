@@ -6,6 +6,7 @@ import {
 	GoogleAuthProvider,
 	signInWithPopup,
 	signOut,
+	updateProfile,
 } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -66,7 +67,7 @@ export const useFirebaseAuth = () => {
 			}
 		} catch (error: any) {
 			console.error(error.message);
-			return false;
+			throw error;
 		}
 		return false;
 	};
@@ -139,15 +140,51 @@ export const useFirebaseAuth = () => {
 		}
 	};
 
-	const getUserInfo = async (user: User): Promise<any | null> => {
-		if (user) {
-			const userRef = doc($firestore, 'users', user.uid);
-			const docSnap = await getDoc(userRef);
-			return docSnap.exists() ? docSnap.data() : null;
-		}
-		return null;
+	const getUserInfo = async (user: User) => {
+		if (!user) return null;
+
+		const userRef = doc($firestore, 'users', user.uid);
+		const docSnap = await getDoc(userRef);
+		return docSnap.exists() ? docSnap.data() : null;
 	};
 
+	// 在會員中心更新用戶資訊時也更新 firebase Auth 資訊避免之後登入被覆蓋
+	const updateUserAuthProfile = async (
+		user: User,
+		updates: { displayName?: string }
+	) => {
+		try {
+			await updateProfile(user, updates);
+			return true;
+		} catch (error) {
+			console.error('Failed to update authentication profile', error);
+			return false;
+		}
+	};
+
+	// 在會員中心更新 Firestore 中的用戶資訊
+	const updateUserFirestoreDoc = async (uid: string, userInfo: UserInfo) => {
+		try {
+			const userRef = doc($firestore, 'users', uid);
+			await setDoc(userRef, userInfo, { merge: true });
+			return true;
+		} catch (error) {
+			console.error('Failed to update Firestore document', error);
+			return false;
+		}
+	};
+
+	interface UserInfo {
+		name: string;
+		email: string;
+		phone: string;
+		address: {
+			city: string;
+			district: string;
+			detail: string;
+			zip: string;
+		};
+	}
 	return {
 		user,
 		authInitialized,
@@ -160,5 +197,7 @@ export const useFirebaseAuth = () => {
 		passwordReset,
 		saveUserToFirestore,
 		getUserInfo,
+		updateUserAuthProfile,
+		updateUserFirestoreDoc,
 	};
 };

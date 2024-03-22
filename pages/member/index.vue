@@ -1,9 +1,9 @@
 <template>
+	<h2>個人資料</h2>
+	<h3>
+		您可以存取及修改您的個人資料（姓名、寄送地址、電話號碼等），以便今後購買更快速
+	</h3>
 	<template v-if="userInfo">
-		<h2>個人資料</h2>
-		<h3>
-			您可以存取及修改您的個人資料（姓名、寄送地址、電話號碼等），以便今後購買更快速
-		</h3>
 		<div class="card py-3 w-full">
 			<form @submit.prevent="saveUserInfo">
 				<label class="form-control w-full max-w-screen-md">
@@ -14,6 +14,7 @@
 						type="text"
 						placeholder="輸入您的姓名或暱稱"
 						class="input input-bordered input-md w-full"
+						:class="{ skeleton: loading }"
 						v-model="userInfo.name"
 					/>
 				</label>
@@ -107,6 +108,7 @@ const cities = taiwanCities;
 const { $toast } = useNuxtApp();
 const {
 	user,
+	initAuthStateListener,
 	getUserInfo,
 	updateUserAuthProfile,
 	updateUserFirestoreDoc,
@@ -127,11 +129,10 @@ interface UserInfo {
 
 const userInfo = ref<UserInfo | null>(null);
 onMounted(async () => {
-	console.log(user.value);
+	await initAuthStateListener();
 	if (user.value) {
 		const doc = await getUserInfo(user.value);
 		if (doc) {
-			console.log(doc);
 			userInfo.value = {
 				...doc,
 				address: doc.address || {

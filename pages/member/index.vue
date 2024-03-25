@@ -14,7 +14,6 @@
 						type="text"
 						placeholder="輸入您的姓名或暱稱"
 						class="input input-bordered input-md w-full"
-						:class="{ skeleton: loading }"
 						v-model="userInfo.name"
 					/>
 				</label>
@@ -104,16 +103,16 @@
 <script setup lang="ts">
 import taiwanCities from '@/assets/data/twCities.json';
 const cities = taiwanCities;
-
+const authStore = useAuthStore();
 const { $toast } = useNuxtApp();
+const { user } = storeToRefs(authStore);
 const {
-	user,
 	initAuthStateListener,
 	getUserInfo,
 	updateUserAuthProfile,
 	updateUserFirestoreDoc,
 	sendVerificationEmail,
-} = useFirebaseAuth();
+} = authStore;
 
 interface UserInfo {
 	name: string;

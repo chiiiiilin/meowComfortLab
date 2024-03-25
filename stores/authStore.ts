@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia';
 import {
 	createUserWithEmailAndPassword,
 	sendEmailVerification,
@@ -10,9 +11,7 @@ import {
 } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { useNuxtApp } from '#app';
-
-export const useFirebaseAuth = () => {
+export const useAuthStore = defineStore('authStore', () => {
 	const { $auth, $firestore } = useNuxtApp(); //firebase.client.js有設置plugin
 
 	const user = useState<User | null>('firebase_user', () => null);
@@ -200,4 +199,4 @@ export const useFirebaseAuth = () => {
 		updateUserAuthProfile,
 		updateUserFirestoreDoc,
 	};
-};
+});

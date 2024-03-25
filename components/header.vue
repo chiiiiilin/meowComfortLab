@@ -239,9 +239,10 @@
 </template>
 <script setup lang="ts">
 const mainStore = useMainStore();
+const authStore = useAuthStore();
 const { $toast } = useNuxtApp();
-const { user, authInitialized, initAuthStateListener, logoutUser } =
-	useFirebaseAuth();
+const { user, authInitialized } = storeToRefs(authStore);
+const { initAuthStateListener, logoutUser } = authStore;
 
 onMounted(async () => {
 	await initAuthStateListener();

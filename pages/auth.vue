@@ -1,7 +1,7 @@
 <script setup lang="ts">
+const authStore = useAuthStore();
 const { $toast } = useNuxtApp();
-const { registerUser, loginUser, loginWithGoogle, passwordReset } =
-	useFirebaseAuth();
+const { registerUser, loginUser, loginWithGoogle, passwordReset } = authStore;
 
 const cardActive = ref('isLogin');
 const creds = reactive({

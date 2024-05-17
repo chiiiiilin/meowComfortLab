@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 export const useMainStore = defineStore('mainStore', () => {
+	const productStore = useProductStore();
+
 	//rwd的目錄切換
 	const isNavOpen = ref(false);
 	const toggleNav = () => {
@@ -17,6 +19,11 @@ export const useMainStore = defineStore('mainStore', () => {
 		icon?: boolean;
 		svg?: string;
 	}
+	interface Category {
+		name: string;
+		subitems: string[];
+	}
+
 	const navItems = ref<NavItem[]>([
 		{
 			name: '所有商品',
@@ -84,8 +91,26 @@ export const useMainStore = defineStore('mainStore', () => {
 				},
 			],
 		},
-		{ icon: true, name: '購物車', source: 'shopping-cart' },
+		{ icon: true, name: '購物車', source: 'cart' },
 	]);
+
+	const updateNavItems = (categories: Category[]) => {
+		const allProductsIndex = navItems.value.findIndex(
+			(item) => item.name === '所有商品'
+		);
+		if (allProductsIndex !== -1) {
+			navItems.value[allProductsIndex].children = categories.map(
+				(category) => ({
+					name: category.name,
+					source: `products?category=${category.name}`,
+					children: category.subitems.map((subitem) => ({
+						name: subitem,
+						source: `products?category=${category.name}&subcategory=${subitem}`,
+					})),
+				})
+			);
+		}
+	};
 
 	//FAQ內容
 	interface FaqItem {
@@ -117,6 +142,7 @@ export const useMainStore = defineStore('mainStore', () => {
 		toggleNav,
 		closeNav,
 		navItems,
+		updateNavItems,
 		faqList,
 		getFaqList,
 	};

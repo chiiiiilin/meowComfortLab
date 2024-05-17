@@ -152,19 +152,49 @@
 			'translate-y-[-120%]': !mainStore.isNavOpen,
 		}"
 	>
-		<ul class="list-none flex flex-col">
+		<ul class="menu list-none flex flex-col">
 			<template v-for="navItem in mainStore.navItems" :key="navItem.name">
-				<li
-					v-if="!navItem.icon"
-					class="w-full py-1 hover:text-primary-dark cursor-pointer"
-				>
-					<NuxtLink
-						:to="`/${navItem['source']}`"
-						class="w-full block"
-					>
-						{{ navItem['name'] }}
-					</NuxtLink>
-				</li>
+				<template v-if="!navItem.icon">
+					<li v-if="!navItem.children">
+						<NuxtLink :to="`/${navItem.source}`">{{
+							navItem.name
+						}}</NuxtLink>
+					</li>
+					<li v-else>
+						<details>
+							<summary>{{ navItem.name }}</summary>
+							<ul>
+								<li
+									v-for="child in navItem.children"
+									:key="child.name"
+								>
+									<details>
+										<summary>{{ child.name }}</summary>
+										<ul v-if="child.children">
+											<li>
+												<NuxtLink
+													:to="`/${child.source}`"
+													>所有{{ child.name }}</NuxtLink
+												>
+											</li>
+											<li
+												v-for="subChild in child.children"
+												:key="subChild.name"
+											>
+												<NuxtLink
+													:to="`/${subChild.source}`"
+													>{{
+														subChild.name
+													}}</NuxtLink
+												>
+											</li>
+										</ul>
+									</details>
+								</li>
+							</ul>
+						</details>
+					</li>
+				</template>
 			</template>
 			<div class="w-full h-[0.5px] my-4 bg-gray-400"></div>
 			<template v-if="authInitialized && user">
@@ -240,11 +270,32 @@
 <script setup lang="ts">
 const mainStore = useMainStore();
 const authStore = useAuthStore();
+const productStore = useProductStore();
 const { $toast } = useNuxtApp();
 const { user, authInitialized } = storeToRefs(authStore);
 const { initAuthStateListener, logoutUser } = authStore;
 
+const categories = computed(() => {
+	const categoryMap = new Map<string, Set<string>>();
+
+	productStore.products.forEach((product) => {
+		if (!categoryMap.has(product.category)) {
+			categoryMap.set(product.category, new Set<string>());
+		}
+		if (product.subcategory) {
+			categoryMap.get(product.category)?.add(product.subcategory);
+		}
+	});
+
+	return Array.from(categoryMap.entries()).map(([name, subitems]) => ({
+		name,
+		subitems: Array.from(subitems),
+	}));
+});
+
 onMounted(async () => {
+	await productStore.getProducts();
+	mainStore.updateNavItems(categories.value);
 	await initAuthStateListener();
 });
 const handleLogin = () => {

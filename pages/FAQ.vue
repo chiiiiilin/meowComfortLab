@@ -1,5 +1,9 @@
 <template>
-	<main class="max-w-screen-lg m-auto my-[100px] px-3">
+	<Top
+		imageUrl="https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?q=80&w=1692&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+		title="常見問題"
+	/>
+	<main class="max-w-screen-lg m-auto px-3">
 		<section
 			v-for="doc in mainStore.faqList"
 			:key="doc.id"

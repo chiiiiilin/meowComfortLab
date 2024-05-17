@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full">
 		<div
-			class="img w-full relative bg-no-repeat bg-fixed h-[200px] bg-contain lg:bg-auto lg:h-[350px] bg-top lg:bg-bottom before:bg-primary-dark after:bg-primary"
+			class="img w-full relative bg-no-repeat bg-fixed lg:bg-contain h-[200px] lg:h-[350px] bg-top lg:bg-bottom before:bg-primary-dark after:bg-primary before:w-0 after:w-0 before:h-[200px] after:h-[200px] before:lg:h-[350px] after:lg:h-[350px] before:absolute after:absolute"
 			:style="{ backgroundImage: `url(${props.imageUrl})` }"
 		></div>
 		<div
@@ -26,13 +26,8 @@ const props = defineProps({
 </script>
 
 <style scoped>
-.img::before,
-.img::after {
-	content: '　';
-	display: block;
-	width: 0;
-	height: 350px;
-	position: absolute;
+.img {
+	background-size: 100%;
 }
 .img::before {
 	animation: background-move 1.5s ease;

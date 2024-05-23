@@ -1,7 +1,7 @@
 <template>
 	<header class="bg-primary shadow-lg fixed w-full z-[999]">
 		<div
-			class="max-w-screen-xl px-3 flex justify-between items-center mx-auto"
+			class="max-w-screen-xl px-3 flex justify-between items-center mx-auto relative"
 		>
 			<h1 class="h-[45px] p-1 lg:h-[60px]">
 				<NuxtLink to="/"
@@ -89,7 +89,29 @@
 										/>
 									</svg>
 								</div>
-								<div v-else-if="navItem.name === '購物車'">
+								<div
+									v-else-if="navItem.name === '購物車'"
+									class="indicator block"
+									@mouseenter="
+										cartStore.showCartDropdown = true
+									"
+									@mouseleave="handleMouseLeave"
+									@click.prevent="
+										cartStore.showCartDropdown = true
+									"
+								>
+									<span
+										class="indicator-item badge badge-primary bg-red-400 border-red-400 transition-duration-500"
+										:class="{
+											'scale-75':
+												cartStore.cartItems.length !==
+												0,
+											'scale-0':
+												cartStore.cartItems.length ===
+												0,
+										}"
+										>{{ cartStore.cartItems.length }}</span
+									>
 									<svg
 										width="25"
 										height="25"
@@ -142,6 +164,13 @@
 					/>
 				</ul>
 			</nav>
+			<CartDropdown
+				:class="{
+					'opacity-100': cartStore.showCartDropdown,
+					'opacity-0': !cartStore.showCartDropdown,
+				}"
+				class="cart-dropdown"
+			/>
 		</div>
 	</header>
 	<!-- 手機 -->
@@ -174,7 +203,9 @@
 											<li>
 												<NuxtLink
 													:to="`/${child.source}`"
-													>所有{{ child.name }}</NuxtLink
+													>所有{{
+														child.name
+													}}</NuxtLink
 												>
 											</li>
 											<li
@@ -271,10 +302,36 @@
 const mainStore = useMainStore();
 const authStore = useAuthStore();
 const productStore = useProductStore();
+const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
 const { user, authInitialized } = storeToRefs(authStore);
 const { initAuthStateListener, logoutUser } = authStore;
 
+//購物車
+const handleClickOutside = (event: MouseEvent) => {
+	const cartElement = document.querySelector('.indicator.block');
+	const cartDropdown = document.querySelector('.cart-dropdown');
+
+	if (
+		cartElement &&
+		!cartElement.contains(event.target as Node) &&
+		cartDropdown &&
+		!cartDropdown.contains(event.target as Node)
+	) {
+		cartStore.setShowCartDropdown(false);
+		document.removeEventListener('click', handleClickOutside);
+	}
+};
+
+const handleMouseLeave = () => {
+	document.addEventListener('click', handleClickOutside);
+};
+
+onBeforeUnmount(() => {
+	document.removeEventListener('click', handleClickOutside);
+});
+
+//商品列表併入nav
 const categories = computed(() => {
 	const categoryMap = new Map<string, Set<string>>();
 
@@ -292,12 +349,13 @@ const categories = computed(() => {
 		subitems: Array.from(subitems),
 	}));
 });
-
 onMounted(async () => {
 	await productStore.getProducts();
 	mainStore.updateNavItems(categories.value);
 	await initAuthStateListener();
 });
+
+//登入&登出
 const handleLogin = () => {
 	mainStore.closeNav();
 	navigateTo('/auth');
@@ -318,5 +376,8 @@ const handleLogout = async () => {
 		});
 	}
 };
+onMounted(async () => {
+	await initAuthStateListener();
+});
 </script>
 <style scoped></style>

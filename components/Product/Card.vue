@@ -1,4 +1,3 @@
-<!-- ProductCard.vue -->
 <template>
 	<div
 		class="group card glass h-80 lg:h-96 p-5 hover:bg-gray-200 transition duration-500 ease-in-out"
@@ -28,7 +27,7 @@
 		</NuxtLink>
 		<button
 			class="hidden group-hover:block btn btn-sm btn-block btn-accent mt-5"
-			type="submit"
+			@click="addToCart()"
 		>
 			加入購物車
 		</button>
@@ -36,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+const cartStore = useCartStore();
+
 interface Product {
 	id: string;
 	name: string;
@@ -44,8 +45,15 @@ interface Product {
 	category: string;
 	subcategory?: string;
 }
-
 const props = defineProps<{
 	product: Product;
 }>();
+
+const addToCart = () => {
+	cartStore.addCartItem(props.product.id, 1);
+	cartStore.setShowCartDropdown(true);
+	setTimeout(() => {
+		cartStore.setShowCartDropdown(false);
+	}, 3000);
+};
 </script>

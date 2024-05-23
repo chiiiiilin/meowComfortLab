@@ -5,7 +5,7 @@ import { ref as vueRef } from 'vue';
 
 export const useProductStore = defineStore('productStore', () => {
 	interface Product {
-		id?: string;
+		id: string;
 		name: string;
 		price: number;
 		description?: string;

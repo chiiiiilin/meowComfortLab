@@ -11,11 +11,14 @@ import {
 } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useCartStore } from './cartStore';
+
 export const useAuthStore = defineStore('authStore', () => {
-	const { $auth, $firestore } = useNuxtApp(); //firebase.client.js有設置plugin
+	const { $auth, $firestore } = useNuxtApp();
 
 	const user = useState<User | null>('firebase_user', () => null);
 	const authInitialized = useState<boolean>('auth_initialized', () => false);
+	const cartStore = useCartStore();
 
 	const initAuthStateListener = (): Promise<void> => {
 		return new Promise((resolve) => {
@@ -25,6 +28,7 @@ export const useAuthStore = defineStore('authStore', () => {
 				if (firebaseUser) {
 					try {
 						await saveUserToFirestore(firebaseUser);
+						await cartStore.loadAndMergeCartItems();
 					} catch (error) {
 						console.error('Error saving user to Firestore:', error);
 					}
@@ -44,6 +48,7 @@ export const useAuthStore = defineStore('authStore', () => {
 			if (userCreds) {
 				user.value = userCreds.user;
 				await sendEmailVerification(userCreds.user);
+				await cartStore.loadAndMergeCartItems();
 				return true;
 			}
 		} catch (error: any) {
@@ -52,6 +57,7 @@ export const useAuthStore = defineStore('authStore', () => {
 		}
 		return false;
 	};
+
 	const loginUser = async (email: string, password: string) => {
 		try {
 			const userCreds = await signInWithEmailAndPassword(
@@ -62,6 +68,7 @@ export const useAuthStore = defineStore('authStore', () => {
 			if (userCreds) {
 				user.value = userCreds.user;
 				await saveUserToFirestore(user.value);
+				await cartStore.loadAndMergeCartItems();
 				return true;
 			}
 		} catch (error: any) {
@@ -78,6 +85,7 @@ export const useAuthStore = defineStore('authStore', () => {
 			if (result) {
 				user.value = result.user;
 				await saveUserToFirestore(result.user);
+				await cartStore.loadAndMergeCartItems();
 				return true;
 			}
 		} catch (error: any) {
@@ -184,6 +192,7 @@ export const useAuthStore = defineStore('authStore', () => {
 			zip: string;
 		};
 	}
+
 	return {
 		user,
 		authInitialized,

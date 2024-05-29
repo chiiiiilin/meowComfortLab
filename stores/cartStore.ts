@@ -13,7 +13,7 @@ export const useCartStore = defineStore('cartStore', () => {
 	const authStore = useAuthStore();
 	const { $firestore } = useNuxtApp();
 
-	const showCartDropdown = ref(false);
+	const showCartDropdown = vueRef(false);
 	const setShowCartDropdown = (value: boolean) => {
 		showCartDropdown.value = value;
 	};
@@ -24,6 +24,15 @@ export const useCartStore = defineStore('cartStore', () => {
 			if (storedCartItems) {
 				cartItems.value = JSON.parse(storedCartItems);
 			}
+		}
+	};
+
+	const updateCartItemQuantity = (id: string, quantity: number) => {
+		const item = cartItems.value.find((item) => item.id === id);
+		if (item) {
+			item.quantity = quantity;
+			saveCartItemsToLocalStorage();
+			saveCartItemsToFirestore();
 		}
 	};
 
@@ -119,11 +128,21 @@ export const useCartStore = defineStore('cartStore', () => {
 		}
 	};
 
+	watch(
+		cartItems,
+		(newCartItems) => {
+			saveCartItemsToLocalStorage();
+			saveCartItemsToFirestore();
+		},
+		{ deep: true }
+	);
+
 	return {
 		showCartDropdown,
 		setShowCartDropdown,
 		cartItems,
 		loadCartItems,
+		updateCartItemQuantity,
 		addCartItem,
 		deleteCartItem,
 		loadAndMergeCartItems,

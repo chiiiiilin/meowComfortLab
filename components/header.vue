@@ -92,13 +92,9 @@
 								<div
 									v-else-if="navItem.name === '購物車'"
 									class="indicator block"
-									@mouseenter="
-										cartStore.showCartDropdown = true
-									"
+									@mouseenter="showCartDropdown()"
 									@mouseleave="handleMouseLeave"
-									@click.prevent="
-										cartStore.showCartDropdown = true
-									"
+									@click.prevent="showCartDropdown()"
 								>
 									<span
 										class="indicator-item badge badge-primary bg-red-400 border-red-400 transition-duration-500"
@@ -299,6 +295,7 @@
 	<div class="h-[45px] lg:h-[60px]"></div>
 </template>
 <script setup lang="ts">
+const route = useRoute();
 const mainStore = useMainStore();
 const authStore = useAuthStore();
 const productStore = useProductStore();
@@ -308,6 +305,11 @@ const { user, authInitialized } = storeToRefs(authStore);
 const { initAuthStateListener, logoutUser } = authStore;
 
 //購物車
+const showCartDropdown = () => {
+	if (route.name !== 'cart') {
+		cartStore.setShowCartDropdown(true);
+	}
+};
 const handleClickOutside = (event: MouseEvent) => {
 	const cartElement = document.querySelector('.indicator.block');
 	const cartDropdown = document.querySelector('.cart-dropdown');

@@ -54,7 +54,11 @@
 					</div>
 				</li>
 			</ul>
-			<NuxtLink to="/cart" class="btn btn-sm btn-block btn-accent mt-5">
+			<NuxtLink
+				to="/cart"
+				class="btn btn-sm btn-block btn-accent mt-5"
+				@click="cartStore.setShowCartDropdown(false)"
+			>
 				前往結帳
 			</NuxtLink>
 		</template>
@@ -88,15 +92,6 @@ onMounted(() => {
 	cartStore.loadCartItems();
 	cartStore.loadAndMergeCartItems();
 });
-
-watch(
-	() => authStore.user,
-	(newUser) => {
-		if (newUser) {
-			cartStore.loadAndMergeCartItems();
-		}
-	}
-);
 </script>
 
 <style scoped></style>

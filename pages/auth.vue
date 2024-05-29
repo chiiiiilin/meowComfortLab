@@ -162,7 +162,9 @@ const handlePasswordReset = async () => {
 </script>
 
 <template>
-	<div class="h-screen background pt-[30%] lg:pt-[15%]">
+	<div
+		class="h-screen background bg-fixed bg-no-repeat bg-cover bg-center pt-[30%] lg:pt-[15%]"
+	>
 		<div class="card w-11/12 lg:w-1/4 glass m-auto lg:ml-[65%]">
 			<div class="card-body">
 				<div class="flex w-full justify-between text-center">
@@ -340,9 +342,5 @@ const handlePasswordReset = async () => {
 <style scoped>
 .background {
 	background-image: url('https://images.unsplash.com/photo-1571570703598-39eb580a0329?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
-	background-position: bottom;
 }
 </style>

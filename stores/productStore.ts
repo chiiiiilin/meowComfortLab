@@ -3,17 +3,17 @@ import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { defineStore } from 'pinia';
 import { ref as vueRef } from 'vue';
 
-export const useProductStore = defineStore('productStore', () => {
-	interface Product {
-		id: string;
-		name: string;
-		price: number;
-		description?: string;
-		category: string;
-		subcategory?: string;
-		coverImages: string[];
-	}
+export interface Product {
+	id: string;
+	name: string;
+	price: number;
+	description?: string;
+	category: string;
+	subcategory?: string;
+	coverImages: string[];
+}
 
+export const useProductStore = defineStore('productStore', () => {
 	const products = vueRef<Product[]>([]);
 
 	const getProducts = async () => {

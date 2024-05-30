@@ -35,16 +35,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Product } from '@/stores/productStore';
 const cartStore = useCartStore();
-
-interface Product {
-	id: string;
-	name: string;
-	price: number;
-	coverImages: string[];
-	category: string;
-	subcategory?: string;
-}
 const props = defineProps<{
 	product: Product;
 }>();

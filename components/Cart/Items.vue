@@ -40,7 +40,7 @@
 					<p class="text-gray-800">NT${{ item.price }}</p>
 					<div class="flex m-auto col-span-2">
 						<div
-							class="px-5 cursor-pointer hover:text-gray-600"
+							class="px-5 cursor-pointer hover:text-accent"
 							@click="decreaseQuantity(item)"
 						>
 							-
@@ -49,7 +49,7 @@
 							{{ item.quantity }}
 						</p>
 						<div
-							class="px-5 cursor-pointer hover:text-gray-600"
+							class="px-5 cursor-pointer hover:text-accent"
 							@click="increaseQuantity(item)"
 						>
 							+

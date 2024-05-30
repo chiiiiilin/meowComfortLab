@@ -160,14 +160,14 @@
 					/>
 				</ul>
 			</nav>
-			<CartDropdown
-				:class="{
-					'opacity-100': cartStore.showCartDropdown,
-					'opacity-0': !cartStore.showCartDropdown,
-				}"
-				class="cart-dropdown"
-			/>
 		</div>
+		<CartDropdown
+			:class="{
+				'translate-x-0': cartStore.showCartDropdown,
+				'translate-x-[150%]': !cartStore.showCartDropdown,
+			}"
+			class="cart-dropdown z-0"
+		/>
 	</header>
 	<!-- 手機 -->
 	<nav

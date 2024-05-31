@@ -1,4 +1,6 @@
-<script lang="ts" setup></script>
+<script setup>
+import 'virtual:svg-icons-register';
+</script>
 
 <template>
 	<Header />

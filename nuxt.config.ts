@@ -1,10 +1,21 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-import * as path from 'path';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import path from 'path';
 
 export default defineNuxtConfig({
+	vite: {
+		plugins: [
+			createSvgIconsPlugin({
+				iconDirs: [path.resolve(process.cwd(), 'assets/icons')],
+				//代表所有svg檔案都會放在assets/icons資歷夾裡
+				symbolId: '[dir]/[name]',
+				customDomId: '__svg__icons__dom__',
+			}),
+		],
+	},
 	devtools: { enabled: true },
 	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 	css: ['~/assets/css/style.css'],
+	plugins: [{ src: '~/plugins/firebase.client.ts', mode: 'client' }],
 	nitro: {
 		preset: 'firebase',
 		firebase: {

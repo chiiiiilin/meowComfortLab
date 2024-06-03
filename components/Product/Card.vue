@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="group card glass h-80 lg:h-96 p-5 hover:bg-gray-200 transition duration-500 ease-in-out"
+		class="group card glass h-60 md:h-96 p-5 hover:bg-gray-200 transition duration-500 ease-in-out"
 	>
 		<NuxtLink
 			:to="`/product/${product.id}`"
@@ -8,12 +8,12 @@
 		>
 			<div class="flex justify-center items-center h-full relative">
 				<img
-					class="absolute opacity-100 group-hover:opacity-0 transition duration-300 ease-in-out"
+					class="absolute opacity-100 group-hover:opacity-0 transition duration-300 ease-in-out w-full h-full object-contain"
 					:src="product.coverImages[0]"
 					:alt="`${product.name}照片`"
 				/>
 				<img
-					class="absolute opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out"
+					class="absolute opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out w-full h-full object-contain"
 					:src="product.coverImages[1]"
 					:alt="`${product.name}使用照片`"
 				/>

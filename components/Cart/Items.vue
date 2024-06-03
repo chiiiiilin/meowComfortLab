@@ -5,7 +5,7 @@
 	</template>
 	<template v-else>
 		<ul class="py-5 my-auto">
-			<li class="py-3 border-b-[0.5px] border-gray-200">
+			<li class="hidden md:block py-3 border-b-[0.5px] border-gray-200">
 				<div class="grid grid-cols-7 gap-4 items-center text-center">
 					<p class="col-span-2 text-left">商品資訊</p>
 					<p class="">單價</p>
@@ -25,7 +25,49 @@
 					},
 				]"
 			>
-				<div class="grid grid-cols-7 gap-4 items-center text-center">
+				<!-- 手機板 -->
+				<div class="flex relative md:hidden">
+					<SvgIcon
+						name="close"
+						class="w-8 h-8 p-2 text-gray-500 cursor-pointer hover:text-gray-600 absolute right-0 top-[-5px]"
+						@click="deleteItem(item.id, $event)"
+					></SvgIcon>
+					<img
+						:src="item.coverImages?.[0]"
+						alt=""
+						class="w-16 h-16 mr-5 rounded-sm cursor-pointer"
+						@click="openInNewTab(`/product/${item.id}`)"
+					/>
+					<div class="grid grid-cols-2 gap-6">
+						<p class="text-gray-600 col-span-2 ml-5">
+							{{ item.name }}
+						</p>
+						<div class="flex m-auto">
+							<div
+								class="px-5 cursor-pointer hover:text-accent"
+								@click="decreaseQuantity(item)"
+							>
+								-
+							</div>
+							<p class="text-gray-800">
+								{{ item.quantity }}
+							</p>
+							<div
+								class="px-5 cursor-pointer hover:text-accent"
+								@click="increaseQuantity(item)"
+							>
+								+
+							</div>
+						</div>
+						<p class="text-gray-800 text-right px-2">
+							NT${{ (item.price ?? 0) * item.quantity }}
+						</p>
+					</div>
+				</div>
+				<!-- 電腦版 -->
+				<div
+					class="hidden md:grid grid-cols-7 gap-4 items-center text-center"
+				>
 					<div class="flex items-center col-span-2">
 						<img
 							:src="item.coverImages?.[0]"
@@ -66,8 +108,10 @@
 				</div>
 			</li>
 		</ul>
-		<div class="grid grid-cols-7 gap-4 items-center text-center py-3">
-			<p class="col-span-2 col-start-6 text-center text-lg">
+		<div
+			class="block md:grid grid-cols-7 gap-4 items-center text-center py-3"
+		>
+			<p class="col-span-2 col-start-6 px-2 text-right md:text-center text-lg">
 				合計 : NT$ {{ totalPrice }}
 			</p>
 		</div>
@@ -118,4 +162,4 @@ const totalPrice = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped src="@/assets/css/normalStyle.css"></style>

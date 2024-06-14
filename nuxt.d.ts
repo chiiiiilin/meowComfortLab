@@ -1,5 +1,6 @@
 import { Auth } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
+import gsap from 'gsap';
 
 interface ToastOptions {
 	message: string;
@@ -15,5 +16,17 @@ declare module '#app' {
 		$auth: Auth;
 		$firestore: Firestore;
 		$toast: Toast;
+	}
+}
+
+declare module '#app' {
+	interface NuxtApp {
+		$gsap: typeof gsap;
+	}
+}
+
+declare module '@vue/runtime-core' {
+	interface ComponentCustomProperties {
+		$gsap: typeof gsap;
 	}
 }

@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
+    "@studio-freight/lenis": "^1.0.42",
     "firebase": "^10.8.1",
     "firebase-admin": "^12.0.0",
+    "gsap": "^3.12.5",
     "marked": "^12.0.1",
     "nuxt": "^3.10.3",
     "pinia": "^2.1.7",

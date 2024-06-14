@@ -15,7 +15,11 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 	css: ['~/assets/css/style.css'],
-	plugins: [{ src: '~/plugins/firebase.client.ts', mode: 'client' }],
+	plugins: [
+		{ src: '~/plugins/firebase.client.ts', mode: 'client' },
+		'~/plugins/gsap.js',
+		{ src: '~/plugins/lenis.client.ts', mode: 'client' },
+	],
 	nitro: {
 		preset: 'firebase',
 		firebase: {

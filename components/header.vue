@@ -1,15 +1,20 @@
 <template>
-	<header class="bg-primary shadow-lg fixed w-full z-[999]">
+	<header
+		class="glass !bg-primary !bg-opacity-60 shadow-lg fixed w-full z-[999]"
+	>
 		<div
 			class="max-w-screen-xl px-3 flex justify-between items-center mx-auto relative"
 		>
-			<h1 class="h-[45px] p-1 lg:h-[60px]">
-				<NuxtLink to="/"
-					><img
-						src="/image/logo-large.svg"
-						alt=""
-						class="w-full h-full object-contain"
-				/></NuxtLink>
+			<h1
+				class="h-[45px] p-1 lg:h-[60px]"
+				:class="{ invisible: atHomeTop }"
+			>
+				<NuxtLink to="/">
+					<SvgIcon
+						name="logo-large"
+						class="w-[150px] h-full object-contain"
+					></SvgIcon
+				></NuxtLink>
 			</h1>
 			<!-- 電腦 -->
 			<nav>
@@ -194,6 +199,23 @@ const cartStore = useCartStore();
 const { $toast } = useNuxtApp();
 const { user, authInitialized } = storeToRefs(authStore);
 const { initAuthStateListener, logoutUser } = authStore;
+
+//logo隱藏
+const atHomeTop = ref(false);
+const checkScrollPosition = () => {
+	if (window.scrollY < 300 && route.name === 'index') {
+		atHomeTop.value = true;
+	} else {
+		atHomeTop.value = false;
+	}
+};
+onMounted(() => {
+	window.addEventListener('scroll', checkScrollPosition);
+	checkScrollPosition();
+});
+onUnmounted(() => {
+	window.removeEventListener('scroll', checkScrollPosition);
+});
 
 //購物車
 const showCartDropdown = () => {

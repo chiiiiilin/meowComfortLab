@@ -17,7 +17,7 @@ export default defineNuxtConfig({
 	css: ['~/assets/css/style.css'],
 	plugins: [
 		{ src: '~/plugins/firebase.client.ts', mode: 'client' },
-		'~/plugins/gsap.js',
+		{ src: '~/plugins/gsap.client.ts', mode: 'client' },
 		{ src: '~/plugins/lenis.client.ts', mode: 'client' },
 	],
 	nitro: {
